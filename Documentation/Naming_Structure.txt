@@ -1,0 +1,33 @@
+
+*************PREFIXES****************
+
+    m     -- for members
+    c     -- for constants/read-only
+    p     -- for pointer (and pp for pointer to pointer)
+    v     -- for volatile
+    s     -- for static
+    i     -- for indexes and iterators
+    e     -- for events
+    g     -- for global
+    
+************ABBREVIATIONS************
+
+	mem   -- memory
+	aloc  -- allocation
+	fl    -- file
+	sys   -- system
+	rt    -- runtime
+	crh   -- crash
+	hndl  -- handler
+	dat   -- data
+	str   -- stream
+	dl    -- dynamic library
+	dll   -- dynamic linked library
+	sern  -- serialization
+	tsk   -- task
+	schd  -- scheduler
+	thrd  -- thread
+	prm   -- primitive
+	tm    -- time/timing
+	tst   -- test/testing
+	mngr  -- manager
