@@ -685,4 +685,5 @@ public class Scalar {
 	public static float ulp(float n) {
 		return Math.ulp(n);
 	}
+	
 }

@@ -488,7 +488,6 @@ public class SystemInfo {
 
 	private void p(String s) {
 		System.out.print(s);
-	
 	}
 
 	public static String getOsname() {
