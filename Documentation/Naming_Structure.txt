@@ -31,3 +31,4 @@
 	tm    -- time/timing
 	tst   -- test/testing
 	mngr  -- manager
+	envr  -- environment

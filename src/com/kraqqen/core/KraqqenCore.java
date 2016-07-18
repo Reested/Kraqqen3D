@@ -1,16 +1,28 @@
 package com.kraqqen.core;
 
-import com.kraqqen.core.arch.LayerStack;
+import java.io.IOException;
+
+import com.kraqqen.editor.MainTestLoop;
+import com.kraqqen.util.envr.EnvironmentSettings;
+import com.kraqqen.util.sys_info.SystemSettings;
 
 public class KraqqenCore {
 	
-	private static LayerStack s_stack;
-	
-	public static LayerStack DefaultLayerStack = new DefaultLayerStack();
-	
-	public static void Init(LayerStack stack)
-	{
-		s_stack = stack;
+	public static void main(String[] args) {
+		EnvironmentSettings environmentSettings = new EnvironmentSettings();
+		SystemSettings settings = new SystemSettings();
+		
+
+		environmentSettings.load();
+
+		
+		System.out.println("DONE!");
+		
+		new MainTestLoop().run();
+		
+		environmentSettings.save();
+		
+		System.out.println("saved!");
 	}
 
 }

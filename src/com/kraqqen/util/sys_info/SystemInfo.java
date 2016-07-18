@@ -135,10 +135,20 @@ public class SystemInfo {
 		//********************************************************************
 		System.out.println("THREAD SETTINGS");
 		System.out.println("============================================================================");
-		pl("Thread CPU Enabled:" , threadMXBean.isThreadCpuTimeEnabled());
+		pl("Thread CPU Supported:" , threadMXBean.isThreadCpuTimeSupported());
+		if(threadMXBean.isThreadCpuTimeSupported()){
+			pl("Thread CPU Enabled:" , threadMXBean.isThreadCpuTimeEnabled());
+		}else{
+			pl("Thread CPU Enabled:" , "NOT SUPPORTED");
+		}
 		pl("Object Monitor Usage Support:" , threadMXBean.isObjectMonitorUsageSupported());
 		pl("Synchronizer Usage Support:" , threadMXBean.isSynchronizerUsageSupported());
-		pl("Thread Contention Monitoring Support" , threadMXBean.isThreadContentionMonitoringEnabled());
+		pl("Thread Contention Monitoring Supported:" , threadMXBean.isThreadContentionMonitoringSupported());
+		if(threadMXBean.isThreadContentionMonitoringSupported()){
+			pl("Thread Contention Monitoring Enabled:" , threadMXBean.isThreadContentionMonitoringEnabled());
+		}else{
+			pl("Thread Contention Monitoring Enabled:" , "NOT SUPPORTED");
+		}
 		pl("Thread CPU Time Supported:" , threadMXBean.isThreadCpuTimeSupported());
 //		if(threadMXBean.isThreadCpuTimeSupported()){
 //			pl("Tread CPU Time" , threadMXBean.g);

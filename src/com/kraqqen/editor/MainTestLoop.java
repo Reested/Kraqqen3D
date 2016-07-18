@@ -106,9 +106,4 @@ public class MainTestLoop {
 			glfwPollEvents();
 		}
 	}
-
-	public static void main(String[] args) {
-		new MainTestLoop().run();
-	}
-
 }
