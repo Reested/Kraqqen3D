@@ -41,7 +41,7 @@ public class EnvironmentSettings {
 					System.out.println("I Found ThreadCpuTime");
 					if(tokens[2].equals("true")){
 						settings.setThreadCpuTime(true);
-					}else{
+					}else if (tokens[2].equals("false")){
 						settings.setThreadCpuTime(false);
 					}
 				}
@@ -50,7 +50,7 @@ public class EnvironmentSettings {
 					System.out.println("I Found ThreadContentionMonitoring");
 					if(tokens[2].equals("true")){
 						settings.setThreadContentionMonitoringEnabled(true);
-					}else{
+					}else if (tokens[2].equals("false")){
 						settings.setThreadContentionMonitoringEnabled(false);
 					}
 				}
@@ -59,7 +59,7 @@ public class EnvironmentSettings {
 					System.out.println("I Found ClassLoadingVerbose");
 					if(tokens[2].equals("true")){
 						settings.setClassLoadingVerbose(true);
-					}else{
+					}else if (tokens[2].equals("false")){
 						settings.setClassLoadingVerbose(false);
 					}
 				}
@@ -68,7 +68,7 @@ public class EnvironmentSettings {
 					System.out.println("I Found MemoryVerbose");
 					if(tokens[2].equals("true")){
 						settings.setMemoryVerbose(true);
-					}else{
+					}else if (tokens[2].equals("false")){
 						settings.setMemoryVerbose(false);
 					}
 				}
