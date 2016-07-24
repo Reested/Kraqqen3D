@@ -164,4 +164,33 @@ public class Vector3f {
 	public boolean equals(Vector3f r) {
 		return m_x == r.GetX() && m_y == r.GetY() && m_z == r.GetZ();
 	}
+
+	public Vector3f Max(Vector3f r) {
+		
+		Vector3f result = new Vector3f(0, 0, 0);
+		
+		if(this.GetX() > r.GetX()){
+			result.SetX(this.GetX());
+		}else{
+			result.SetX(r.GetX());
+		}
+			
+		if(this.GetY() > r.GetY()){
+			result.SetY(this.GetY());
+		}else{
+			result.SetY(r.GetY());
+		}
+		
+		if(this.GetZ() > r.GetZ()){
+			result.SetZ(this.GetZ());
+		}else{
+			result.SetZ(r.GetZ());
+		}
+		
+		return result;
+	}
+
+	public Vector3f Reflect(Vector3f normal) {
+		return this.Sub((normal.Mul(this.Dot(normal) * 2)));
+	}
 }

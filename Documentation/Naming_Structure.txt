@@ -21,7 +21,7 @@
 	hndl  -- handler
 	dat   -- data
 	str   -- stream
-	dl    -- dynamic library
+	dl    -- download
 	dll   -- dynamic linked library
 	sern  -- serialization
 	tsk   -- task

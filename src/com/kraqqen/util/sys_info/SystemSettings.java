@@ -9,8 +9,6 @@ import java.lang.management.PlatformLoggingMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
 
-import javax.print.attribute.standard.RequestingUserName;
-
 public class SystemSettings {
 
 	RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
@@ -72,4 +70,6 @@ public class SystemSettings {
 	public boolean getMemoryVerbose(){
 		return memoryMXBean.isVerbose();
 	}
+	
+	
 }

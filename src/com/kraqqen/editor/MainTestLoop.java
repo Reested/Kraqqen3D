@@ -18,23 +18,26 @@ public class MainTestLoop {
 	
 	SystemInfo sysInfo = new SystemInfo();
 	
+	
+	
 	public void run() {
+		
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 		
-		sysInfo.printInfo();
+		//sysInfo.printInfo();
 		
-//		try {
-//			init();
-//			loop();
-//
-//			// Free the window callbacks and destroy the window
-//			glfwFreeCallbacks(window);
-//			glfwDestroyWindow(window);
-//		} finally {
-//			// Terminate GLFW and free the error callback
-//			glfwTerminate();
-//			glfwSetErrorCallback(null).free();
-//		}
+		try {
+			init();
+			loop();
+
+			// Free the window callbacks and destroy the window
+			glfwFreeCallbacks(window);
+			glfwDestroyWindow(window);
+		} finally {
+			// Terminate GLFW and free the error callback
+			glfwTerminate();
+			glfwSetErrorCallback(null).free();
+		}
 	}
 
 	private void init() {

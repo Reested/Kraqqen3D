@@ -56,6 +56,7 @@ public class Main
 		Camera camera = new Camera(new Matrix4f().InitPerspective((float)Math.toRadians(70.0f),
 					   	(float)target.GetWidth()/(float)target.GetHeight(), 0.1f, 1000.0f));
 		
+		@SuppressWarnings("unused")
 		float rotCounter = 0.0f;
 		long previousTime = System.nanoTime();
 		while(true)

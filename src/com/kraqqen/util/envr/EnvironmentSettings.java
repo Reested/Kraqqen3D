@@ -8,23 +8,32 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.kraqqen.util.sys_info.SystemSettings;
 
 public class EnvironmentSettings {
 	
-	private static final String SETTING_LOCATION = "CONFIG/settings.cfg";
+	private static final String ENVIRONMENT_SETTING_LOCATION = "CONFIG/settings.cfg";
 	
 	SystemSettings settings = new SystemSettings();
 	
 	public void load(){
 		BufferedReader file = null;
 		try {
-			file = new BufferedReader(new FileReader(SETTING_LOCATION));
+			file = new BufferedReader(new FileReader(ENVIRONMENT_SETTING_LOCATION));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		Properties properties = new Properties(System.getProperties());
+		try {
+			properties.load(file);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		//System.getProperties().list(System.out);
 
 		String line;
 
@@ -38,7 +47,7 @@ public class EnvironmentSettings {
 					continue;
 				else if(tokens[0].equals("ThreadCpuTime"))
 				{
-					System.out.println("I Found ThreadCpuTime");
+					//System.out.println("I Found ThreadCpuTime");
 					if(tokens[2].equals("true")){
 						settings.setThreadCpuTime(true);
 					}else if (tokens[2].equals("false")){
@@ -47,7 +56,7 @@ public class EnvironmentSettings {
 				}
 				else if(tokens[0].equals("ThreadContentionMonitoring"))
 				{
-					System.out.println("I Found ThreadContentionMonitoring");
+					//System.out.println("I Found ThreadContentionMonitoring");
 					if(tokens[2].equals("true")){
 						settings.setThreadContentionMonitoringEnabled(true);
 					}else if (tokens[2].equals("false")){
@@ -56,7 +65,7 @@ public class EnvironmentSettings {
 				}
 				else if(tokens[0].equals("ClassLoadingVerbose"))
 				{
-					System.out.println("I Found ClassLoadingVerbose");
+					//System.out.println("I Found ClassLoadingVerbose");
 					if(tokens[2].equals("true")){
 						settings.setClassLoadingVerbose(true);
 					}else if (tokens[2].equals("false")){
@@ -65,7 +74,7 @@ public class EnvironmentSettings {
 				}
 				else if(tokens[0].equals("MemoryVerbose"))
 				{
-					System.out.println("I Found MemoryVerbose");
+					//System.out.println("I Found MemoryVerbose");
 					if(tokens[2].equals("true")){
 						settings.setMemoryVerbose(true);
 					}else if (tokens[2].equals("false")){
@@ -74,13 +83,11 @@ public class EnvironmentSettings {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			file.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -88,14 +95,17 @@ public class EnvironmentSettings {
 	public void save(){
 		PrintWriter printWriter = null;
 		try {
-			printWriter = new PrintWriter(new FileOutputStream(SETTING_LOCATION));
+			printWriter = new PrintWriter(new FileOutputStream(ENVIRONMENT_SETTING_LOCATION));
 			
 			printWriter.println("#########################");
 			printWriter.println("# KRAQQEN3D CONFIG FILE # ");
 			printWriter.println("#########################");
 			printWriter.println("#");
-			printWriter.println("# WARNING: Do Not Modify");
+			printWriter.println("# WARNING: Do Not Modify. If Modified, Game Engine May Not Work.");
 			printWriter.println("#");
+			
+			
+			// This is where all of the code goes for modifying the "settings.cfg" file 
 			printWriter.println("ThreadCpuTime = " + settings.getThreadCpuTime());
 			printWriter.println("ThreadContentionMonitoring = " + settings.getThreadContentionMonitoringEnabled());
 			printWriter.println("ClassLoadingVerbose = " + settings.getClassLoadingVerbose());

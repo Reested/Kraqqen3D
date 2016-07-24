@@ -13,8 +13,10 @@ import java.lang.management.MemoryUsage;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.PlatformLoggingMXBean;
 import java.lang.management.RuntimeMXBean;
+import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.Arrays;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +140,19 @@ public class SystemInfo {
 		pl("Thread CPU Supported:" , threadMXBean.isThreadCpuTimeSupported());
 		if(threadMXBean.isThreadCpuTimeSupported()){
 			pl("Thread CPU Enabled:" , threadMXBean.isThreadCpuTimeEnabled());
+			if(threadMXBean.isThreadCpuTimeSupported()){
+				for(int id=1; id<threadMXBean.getThreadCount()*2; id++){
+					int TID = id-1;
+					pl("Thread ("+TID+") CPU Time:" , threadMXBean.getThreadCpuTime(id));
+				}
+				for(int id=1; id<threadMXBean.getThreadCount()*2; id++){
+					int TID = id-1;
+					pl("Thread ("+TID+") User Time:" , threadMXBean.getThreadUserTime(id));
+				}
+			}else{
+				pl("Thread CPU Time:" , "NOT SUPPORTED");
+				pl("Thread User Time:", "NOT SUPPORTED");
+			}
 		}else{
 			pl("Thread CPU Enabled:" , "NOT SUPPORTED");
 		}
@@ -150,11 +165,7 @@ public class SystemInfo {
 			pl("Thread Contention Monitoring Enabled:" , "NOT SUPPORTED");
 		}
 		pl("Thread CPU Time Supported:" , threadMXBean.isThreadCpuTimeSupported());
-//		if(threadMXBean.isThreadCpuTimeSupported()){
-//			pl("Tread CPU Time" , threadMXBean.g);
-//		}else{
-//			pl("Tread CPU Time" , "NOT SUPPORTED");
-//		}
+		
 		pl("Current Thread CPU Time Supported:" , threadMXBean.isCurrentThreadCpuTimeSupported());
 		if(threadMXBean.isCurrentThreadCpuTimeSupported()){
 			pl("Current Tread CPU Time:" , threadMXBean.getCurrentThreadCpuTime());
@@ -168,8 +179,12 @@ public class SystemInfo {
 		plm("Monitor Deadlocked Threads:" , threadMXBean.findMonitorDeadlockedThreads());
 		plm("Deadlocked Threads:" , threadMXBean.findDeadlockedThreads());
 		pl("All Thread ID's:" , threadMXBean.getAllThreadIds());
+//		for(int id=1; id<threadMXBean.getAllThreadIds().length;id++){
+//			int TID = id - 1;
+//			String lid = threadMXBean.getAllThreadIds().toString();
+//			pl("Thread ("+TID+") Info:" , threadMXBean.getThreadInfo(id));
+//		}
 		pl("Thread Obj Name:" , threadMXBean.getObjectName());
-		// pl("" , threadMXBean.getThreadCpuTime(id));
 		// pl("" , threadMXBean.getThreadUserTime(id));
 
 		// pl("" , threadMXBean.dumpAllThreads(lockedMonitors, lockedSynchronizers));
@@ -179,8 +194,6 @@ public class SystemInfo {
 		// pl("" , threadMXBean.getThreadInfo(ids, maxDepth));
 		// pl("" , threadMXBean.getThreadInfo(ids, lockedMonitors,lockedSynchronizers);
 		// pl("" , threadMXBean.resetPeakThreadCount();
-		// pl("" , threadMXBean.setThreadContentionMonitoringEnabled(enable);
-		// pl("" , threadMXBean.setThreadCpuTimeEnabled(enable);
 		System.out.println("============================================================================");
 		pl("","");
 		pl("" , "");
@@ -250,6 +263,8 @@ public class SystemInfo {
 		pl("Compiler Obj Name:" , compilationMXBean.getObjectName());
 		System.out.println("============================================================================");
 		pl("" , "");
+		pl("" , "");
+		pl("" , "");
 		
 		
 		//********************************************************************
@@ -275,6 +290,27 @@ public class SystemInfo {
 		plbg("GARBAGE COLLECTOR:" , garbageCollectorMXBean);
 		pl("","");
 	}
+	
+	private void pl(String message, ThreadInfo threadInfo) {
+		String s = String.valueOf(threadInfo);
+		pl(message, s);
+	}
+
+	private void pl(String message, String s) {
+		String whitespace = "";
+		for (int i = message.length(); i < DISPLAYED_MESSAGE_LENGTH; i++) {
+			whitespace += " ";
+		}
+		System.out.println(message + whitespace + s);
+	}
+	
+	private void pl(int messageLength, String message, String s) {
+		String whitespace = "";
+		for (int i = message.length(); i < messageLength; i++) {
+			whitespace += " ";
+		}
+		System.out.println(message + whitespace + s);
+	}
 
 	private void pl(String Message, double n) {
 		String s = String.valueOf(n);
@@ -296,26 +332,31 @@ public class SystemInfo {
 		pl(Message, s);
 	}
 
+	private void pl(int messageLength, String Message, MemoryUsage heapMemoryUsage) {
+		String s = String.valueOf(heapMemoryUsage);
+		pl(messageLength, Message, s);
+	}
+
 	private void plbg(String Message, List<GarbageCollectorMXBean> garbageCollectorMXBean2) {
 		for (int i = 0; i < garbageCollectorMXBean2.size(); i++) {
 			if (i == 0) {
 				pl(Message, "");
 				pl("", "");
-				pl("\tName:", garbageCollectorMXBean2.get(i).getName());
-				pl("\tIs Valid:", garbageCollectorMXBean2.get(i).isValid());
-				pl("\tCollection Count:", garbageCollectorMXBean2.get(i).getCollectionCount());
-				pl("\tCollection Time:", garbageCollectorMXBean2.get(i).getCollectionTime());
-				pl("\tMemory Pool Names:", garbageCollectorMXBean2.get(i).getMemoryPoolNames());
-				pl("\t" + Message + " Obj Name:", garbageCollectorMXBean2.get(i).getObjectName());
+				pl(43, "\tName:", garbageCollectorMXBean2.get(i).getName());
+				pl(43, "\tIs Valid:", garbageCollectorMXBean2.get(i).isValid());
+				pl(43, "\tCollection Count:", garbageCollectorMXBean2.get(i).getCollectionCount());
+				pl(43, "\tCollection Time:", garbageCollectorMXBean2.get(i).getCollectionTime());
+				pl(43, "\tMemory Pool Names:", garbageCollectorMXBean2.get(i).getMemoryPoolNames());
+				pl(43, "\t" + Message.replace(":", "") + " Obj Name:", garbageCollectorMXBean2.get(i).getObjectName());
 				pl("", "");
 
 			} else {
-				pl("\tName:", garbageCollectorMXBean2.get(i).getName());
-				pl("\tIs Valid:", garbageCollectorMXBean2.get(i).isValid());
-				pl("\tCollection Count:", garbageCollectorMXBean2.get(i).getCollectionCount());
-				pl("\tCollection Time:", garbageCollectorMXBean2.get(i).getCollectionTime());
-				pl("\tMemory Pool Names:", garbageCollectorMXBean2.get(i).getMemoryPoolNames());
-				pl("\t" + Message + " Obj Name:", garbageCollectorMXBean2.get(i).getObjectName());
+				pl(43, "\tName:", garbageCollectorMXBean2.get(i).getName());
+				pl(43, "\tIs Valid:", garbageCollectorMXBean2.get(i).isValid());
+				pl(43, "\tCollection Count:", garbageCollectorMXBean2.get(i).getCollectionCount());
+				pl(43, "\tCollection Time:", garbageCollectorMXBean2.get(i).getCollectionTime());
+				pl(43, "\tMemory Pool Names:", garbageCollectorMXBean2.get(i).getMemoryPoolNames());
+				pl(43, "\t" + Message.replace(":", "") + " Obj Name:", garbageCollectorMXBean2.get(i).getObjectName());
 				pl("", "");
 			}
 		}
@@ -327,91 +368,91 @@ public class SystemInfo {
 			if (i == 0) {
 				pl(Message, "");
 				pl("", "");
-				pl("\tName:", memoryPoolMXBean2.get(i).getName());
-				pl("\tType:", memoryPoolMXBean2.get(i).getType());
-				pl("\tIs Valid:", memoryPoolMXBean2.get(i).isValid());
-				pl("\tCollection usage:", memoryPoolMXBean2.get(i).getCollectionUsage());
-				pl("\tPeak Usage:", memoryPoolMXBean2.get(i).getPeakUsage());
-				pl("\tUsage:", memoryPoolMXBean2.get(i).getUsage());
-				pl("\tCollection Usage Threshold Supported:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdSupported());
+				pl(43, "\tName:", memoryPoolMXBean2.get(i).getName());
+				pl(43, "\tType:", memoryPoolMXBean2.get(i).getType());
+				pl(43, "\tIs Valid:", memoryPoolMXBean2.get(i).isValid());
+				pl(43, "\tCollection usage:", memoryPoolMXBean2.get(i).getCollectionUsage());
+				pl(43, "\tPeak Usage:", memoryPoolMXBean2.get(i).getPeakUsage());
+				pl(43, "\tUsage:", memoryPoolMXBean2.get(i).getUsage());
+				pl(43, "\tCollection Usage Threshold Supported:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdSupported());
 				if(memoryPoolMXBean2.get(i).isCollectionUsageThresholdSupported()){
-					pl("\tCollection Usage Threshold:", memoryPoolMXBean2.get(i).getCollectionUsageThreshold());
-					pl("\tCollection Usage Threshold Count:", memoryPoolMXBean2.get(i).getCollectionUsageThresholdCount());
-					pl("\tCollection Usage Threshold Exceeded:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdExceeded());
+					pl(43, "\tCollection Usage Threshold:", memoryPoolMXBean2.get(i).getCollectionUsageThreshold());
+					pl(43, "\tCollection Usage Threshold Count:", memoryPoolMXBean2.get(i).getCollectionUsageThresholdCount());
+					pl(43, "\tCollection Usage Threshold Exceeded:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdExceeded());
 					
 				}else{
-					pl("\tCollection Usage Threshold:", "NOT SUPPORTED");
-					pl("\tCollection Usage Threshold Count:", "NOT SUPPORTED");
-					pl("\tCollection Usage Threshold Exceeded:", "NOT SUPPORTED");
+					pl(43, "\tCollection Usage Threshold:", "NOT SUPPORTED");
+					pl(43, "\tCollection Usage Threshold Count:", "NOT SUPPORTED");
+					pl(43, "\tCollection Usage Threshold Exceeded:", "NOT SUPPORTED");
 				}
-				pl("\tUsage Threshold Supported:", memoryPoolMXBean2.get(i).isUsageThresholdSupported());
+				pl(43, "\tUsage Threshold Supported:", memoryPoolMXBean2.get(i).isUsageThresholdSupported());
 				if(memoryPoolMXBean2.get(i).isUsageThresholdSupported()){
-					pl("\tUsage Threshold:", memoryPoolMXBean2.get(i).getUsageThreshold());
-					pl("\tUsage Threshold Count:", memoryPoolMXBean2.get(i).getUsageThresholdCount());
-					pl("\tUsage Threshold Count Exceeded:", memoryPoolMXBean2.get(i).isUsageThresholdExceeded());
+					pl(43, "\tUsage Threshold:", memoryPoolMXBean2.get(i).getUsageThreshold());
+					pl(43, "\tUsage Threshold Count:", memoryPoolMXBean2.get(i).getUsageThresholdCount());
+					pl(43, "\tUsage Threshold Count Exceeded:", memoryPoolMXBean2.get(i).isUsageThresholdExceeded());
 					
 				}else{
-					pl("\tUsage Threshold:", "NOT SUPPORTED");
-					pl("\tUsage Threshold Count:", "NOT SUPPORTED");
-					pl("\tUsage Threshold Count Exceeded:", "NOT SUPPORTED");
+					pl(43, "\tUsage Threshold:", "NOT SUPPORTED");
+					pl(43, "\tUsage Threshold Count:", "NOT SUPPORTED");
+					pl(43, "\tUsage Threshold Count Exceeded:", "NOT SUPPORTED");
 				}
-				pl("\tMemory Manager Names:", memoryPoolMXBean2.get(i).getMemoryManagerNames());				
-				pl("\t" + Message + " Obj Name:", memoryPoolMXBean2.get(i).getObjectName());
-				pl("\t" + Message + " Class Name:", memoryPoolMXBean2.get(i).getClass());
+				pl(43, "\tMemory Manager Names:", memoryPoolMXBean2.get(i).getMemoryManagerNames());				
+				pl(43, "\t" + Message.replace(":", "") + " Obj Name:", memoryPoolMXBean2.get(i).getObjectName());
+				pl(43, "\t" + Message.replace(":", "") + " Class Name:", memoryPoolMXBean2.get(i).getClass());
 				pl("", "");
 			} else {
-				pl("\tName:", memoryPoolMXBean2.get(i).getName());
-				pl("\tType:", memoryPoolMXBean2.get(i).getType());
-				pl("\tIs Valid:", memoryPoolMXBean2.get(i).isValid());
-				pl("\tCollection usage:", memoryPoolMXBean2.get(i).getCollectionUsage());
-				pl("\tPeak Usage:", memoryPoolMXBean2.get(i).getPeakUsage());
-				pl("\tUsage:", memoryPoolMXBean2.get(i).getUsage());
-				pl("\tCollection Usage Threshold Supported:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdSupported());
+				pl(43, "\tName:", memoryPoolMXBean2.get(i).getName());
+				pl(43, "\tType:", memoryPoolMXBean2.get(i).getType());
+				pl(43, "\tIs Valid:", memoryPoolMXBean2.get(i).isValid());
+				pl(43, "\tCollection usage:", memoryPoolMXBean2.get(i).getCollectionUsage());
+				pl(43, "\tPeak Usage:", memoryPoolMXBean2.get(i).getPeakUsage());
+				pl(43, "\tUsage:", memoryPoolMXBean2.get(i).getUsage());
+				pl(43, "\tCollection Usage Threshold Supported:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdSupported());
 				if(memoryPoolMXBean2.get(i).isCollectionUsageThresholdSupported()){
-					pl("\tCollection Usage Threshold:", memoryPoolMXBean2.get(i).getCollectionUsageThreshold());
-					pl("\tCollection Usage Threshold Count:", memoryPoolMXBean2.get(i).getCollectionUsageThresholdCount());
-					pl("\tCollection Usage Threshold Exceeded:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdExceeded());
+					pl(43, "\tCollection Usage Threshold:", memoryPoolMXBean2.get(i).getCollectionUsageThreshold());
+					pl(43, "\tCollection Usage Threshold Count:", memoryPoolMXBean2.get(i).getCollectionUsageThresholdCount());
+					pl(43, "\tCollection Usage Threshold Exceeded:", memoryPoolMXBean2.get(i).isCollectionUsageThresholdExceeded());
 					
 				}else{
-					pl("\tCollection Usage Threshold:", "NOT SUPPORTED");
-					pl("\tCollection Usage Threshold Count:", "NOT SUPPORTED");
-					pl("\tCollection Usage Threshold Exceeded:", "NOT SUPPORTED");
+					pl(43, "\tCollection Usage Threshold:", "NOT SUPPORTED");
+					pl(43, "\tCollection Usage Threshold Count:", "NOT SUPPORTED");
+					pl(43, "\tCollection Usage Threshold Exceeded:", "NOT SUPPORTED");
 				}
-				pl("\tUsage Threshold Supported:", memoryPoolMXBean2.get(i).isUsageThresholdSupported());
+				pl(43, "\tUsage Threshold Supported:", memoryPoolMXBean2.get(i).isUsageThresholdSupported());
 				if(memoryPoolMXBean2.get(i).isUsageThresholdSupported()){
-					pl("\tUsage Threshold:", memoryPoolMXBean2.get(i).getUsageThreshold());
-					pl("\tUsage Threshold Count:", memoryPoolMXBean2.get(i).getUsageThresholdCount());
-					pl("\tUsage Threshold Count Exceeded:", memoryPoolMXBean2.get(i).isUsageThresholdExceeded());
+					pl(43, "\tUsage Threshold:", memoryPoolMXBean2.get(i).getUsageThreshold());
+					pl(43, "\tUsage Threshold Count:", memoryPoolMXBean2.get(i).getUsageThresholdCount());
+					pl(43, "\tUsage Threshold Count Exceeded:", memoryPoolMXBean2.get(i).isUsageThresholdExceeded());
 					
 				}else{
-					pl("\tUsage Threshold:", "NOT SUPPORTED");
-					pl("\tUsage Threshold Count:", "NOT SUPPORTED");
-					pl("\tUsage Threshold Count Exceeded:", "NOT SUPPORTED");
+					pl(43, "\tUsage Threshold:", "NOT SUPPORTED");
+					pl(43, "\tUsage Threshold Count:", "NOT SUPPORTED");
+					pl(43, "\tUsage Threshold Count Exceeded:", "NOT SUPPORTED");
 				}
-				pl("\tMemory Manager Names:", memoryPoolMXBean2.get(i).getMemoryManagerNames());				
-				pl("\t" + Message + " Obj Name:", memoryPoolMXBean2.get(i).getObjectName());
-				pl("\t" + Message + " Class Name:", memoryPoolMXBean2.get(i).getClass());
+				pl(43, "\tMemory Manager Names:", memoryPoolMXBean2.get(i).getMemoryManagerNames());				
+				pl(43, "\t" + Message.replace(":", "") + " Obj Name:", memoryPoolMXBean2.get(i).getObjectName());
+				pl(43, "\t" + Message.replace(":", "") + " Class Name:", memoryPoolMXBean2.get(i).getClass());
 				pl("", "");
 			}
 		}
 
 	}
-
-	private void pl(String message, MemoryType type) {
+	
+	private void pl(int messageLength, String message, MemoryType type) {
 		String s = String.valueOf(type);
-		pl(message, s);
+		pl(messageLength, message, s);
 		
 	}
-
-	private void pl(String message, String[] memoryManagerNames) {
+	
+	private void pl(int messageLength, String message, String[] memoryManagerNames) {
 		for(int i=0; i<memoryManagerNames.length; i++){
-			pl(message, memoryManagerNames[i]);
+			pl(messageLength, message, memoryManagerNames[i]);
 		}
 	}
-
-	private void pl(String message, Class<? extends MemoryPoolMXBean> class1) {
+	
+	private void pl(int messageLength, String message, Class<? extends MemoryPoolMXBean> class1) {
 		String s = String.valueOf(class1);
-		pl(message, s);
+		pl(messageLength, message, s);
 	}
 
 	private void plm(String Message, long[] findMonitorDeadlockedThreads) {
@@ -444,16 +485,16 @@ public class SystemInfo {
 			if (i == 0) {
 				pl(Message,"");
 				pl("", "");
-				pl("\tName:", bufferPoolMXBean2.get(i).getName());
-				pl("\tIs Valid:", bufferPoolMXBean2.get(i).isValid());
-				pl("\tMemory Pool Names:", bufferPoolMXBean2.get(i).getMemoryPoolNames());
-				pl("\t" + Message + " Obj Name:", bufferPoolMXBean2.get(i).getObjectName());	
+				pl(43, "\tName:", bufferPoolMXBean2.get(i).getName());
+				pl(43, "\tIs Valid:", bufferPoolMXBean2.get(i).isValid());
+				pl(43, "\tMemory Pool Names:", bufferPoolMXBean2.get(i).getMemoryPoolNames());
+				pl(43, "\t" + Message.replace(":", "") + " Obj Name:", bufferPoolMXBean2.get(i).getObjectName());	
 				pl("", "");
 			} else {
-				pl("\tName:", bufferPoolMXBean2.get(i).getName());
-				pl("\tIs Valid:", bufferPoolMXBean2.get(i).isValid());
-				pl("\tMemory Pool Names:", bufferPoolMXBean2.get(i).getMemoryPoolNames());
-				pl("\t" + Message + " Obj Name:", bufferPoolMXBean2.get(i).getObjectName());	
+				pl(43, "\tName:", bufferPoolMXBean2.get(i).getName());
+				pl(43, "\tIs Valid:", bufferPoolMXBean2.get(i).isValid());
+				pl(43, "\tMemory Pool Names:", bufferPoolMXBean2.get(i).getMemoryPoolNames());
+				pl(43, "\t" + Message.replace(":", "") + " Obj Name:", bufferPoolMXBean2.get(i).getObjectName());	
 				pl("", "");
 			}
 		}
@@ -462,6 +503,11 @@ public class SystemInfo {
 	private void pl(String Message, boolean bootClassPathSupported) {
 		String s = String.valueOf(bootClassPathSupported);
 		pl(Message, s);
+	}
+	
+	private void pl(int messageLength, String Message, boolean bootClassPathSupported) {
+		String s = String.valueOf(bootClassPathSupported);
+		pl(messageLength, Message, s);
 	}
 
 	private void pl(String Message, Map<String, String> systemProperties) {
@@ -472,10 +518,19 @@ public class SystemInfo {
 	private void pl(String Message, ObjectName objectName) {
 		pl(Message, objectName.toString());
 	}
+	
+	private void pl(int messageLength, String Message, ObjectName objectName) {
+		pl(messageLength, Message, objectName.toString());
+	}
 
 	private void pl(String Message, long n) {
 		String s = String.valueOf(n);
 		pl(Message, s);
+	}
+	
+	private void pl(int messageLength, String Message, long n) {
+		String s = String.valueOf(n);
+		pl(messageLength, Message, s);
 	}
 
 	private void pl(String Message, List<String> inputArguments) {
@@ -488,17 +543,7 @@ public class SystemInfo {
 		}
 	}
 
-	private void pl(String message, String s) {
-		String whitespace = "";
-		for (int i = message.length(); i < DISPLAYED_MESSAGE_LENGTH; i++) {
-			whitespace += " ";
-		}
-		System.out.println(message + whitespace + s);
-	}
-
-	private void p(String s) {
-		System.out.print(s);
-	}
+	
 
 	public static String getOsname() {
 		return osName;
