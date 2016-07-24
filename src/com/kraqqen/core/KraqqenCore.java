@@ -1,6 +1,8 @@
 package com.kraqqen.core;
 
+import java.io.File;
 import java.io.IOException;
+
 import com.kraqqen.core.physics.AABB;
 import com.kraqqen.core.physics.BoundingSphere;
 import com.kraqqen.core.physics.PhysicsObject;
@@ -17,6 +19,8 @@ public class KraqqenCore {
 	static Timer saveTimer = new Timer();
 	static Timer loadTimer = new Timer();
 	static Timer runTimer = new Timer();
+	static File file = new File("scripts/matrix.bat");
+	
 
 	public static void main(String[] args) {
 
@@ -35,7 +39,7 @@ public class KraqqenCore {
 		loadTimer.DisplayAndResetMilli("LOADING COMPLETED IN:", 0, 50);
 
 		try {
-			Runtime.getRuntime().exec("cmd /c start C:/Users/E/git/Kraqqen3D/scripts/matrix.bat");
+			Runtime.getRuntime().exec("cmd /c start " + file.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,10 +50,10 @@ public class KraqqenCore {
 	private static void run() {
 		System.out.println("STARTING ENGINE");
 		runTimer.StartInvocation();
-		// Map<String, String> env = System.getenv();
-		// for (String envName : env.keySet()) {
-		// System.out.format("%s=%s%n", envName, env.get(envName));
-		// }
+//		// Map<String, String> env = System.getenv();
+//		// for (String envName : env.keySet()) {
+//		// System.out.format("%s=%s%n", envName, env.get(envName));
+//		// }
 		logger.doSomeThingAndLog();
 
 		BoundingSphere.test();
