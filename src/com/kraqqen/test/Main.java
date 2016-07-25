@@ -31,9 +31,6 @@ package com.kraqqen.test;
 
 import java.io.IOException;
 
-import com.kraqqen.engine.gui.GUIButton;
-import com.kraqqen.util.math.Rect;
-
 /**
  * The sole purpose of this class is to hold the main method.
  *
@@ -64,8 +61,6 @@ public class Main
 		Camera camera = new Camera(new Matrix4f().InitPerspective((float)Math.toRadians(70.0f),
 					   	(float)target.GetWidth()/(float)target.GetHeight(), 0.1f, 1000.0f));
 		
-		GUIButton button = new GUIButton(new Rect(0, 0, 100, 100));
-		
 		@SuppressWarnings("unused")
 		float rotCounter = 0.0f;
 		long previousTime = System.nanoTime();
@@ -84,8 +79,6 @@ public class Main
 			target.ClearDepthBuffer();
 			monkeyMesh.Draw(target, vp, monkeyTransform.GetTransformation(), texture2);
 			terrainMesh.Draw(target, vp, terrainTransform.GetTransformation(), texture);
-			
-			button.Draw(target);
 
 			display.SwapBuffers();
 			
