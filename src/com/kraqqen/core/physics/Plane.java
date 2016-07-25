@@ -30,7 +30,7 @@ public class Plane extends Collider{
 	@Override
 	void Transform(Vector3f translation) {}
 	
-	public static void test(){
+	public static void test(boolean print){
 		
 		Plane plane1 = new Plane(new Vector3f(0.0f, 1.0f, 0.0f), 0.0f);
 		
@@ -56,14 +56,18 @@ public class Plane extends Collider{
 		assert(plane1IntersectSphere4.isDoesIntersect() == true);
 		assert(plane1IntersectSphere4.getDistance()     == 1.0f);
 		
-//		System.out.println("Plane1 intersect Sphere1: " + plane1IntersectSphere1.isDoesIntersect());
-//		System.out.println("Distance: " + plane1IntersectSphere1.getDistance());
-//		System.out.println("Plane1 intersect Sphere2: " + plane1IntersectSphere2.isDoesIntersect());
-//		System.out.println("Distance: " + plane1IntersectSphere2.getDistance());
-//		System.out.println("Plane1 intersect Sphere3: " + plane1IntersectSphere3.isDoesIntersect());
-//		System.out.println("Distance: " + plane1IntersectSphere3.getDistance());
-//		System.out.println("Plane1 intersect Sphere4: " + plane1IntersectSphere4.isDoesIntersect());
-//		System.out.println("Distance: " + plane1IntersectSphere4.getDistance());
+		if(print){
+			System.out.println("");
+			System.out.println("Plane1 intersect Sphere1: " + plane1IntersectSphere1.isDoesIntersect());
+			System.out.println("Distance: " + plane1IntersectSphere1.getDistance());
+			System.out.println("Plane1 intersect Sphere2: " + plane1IntersectSphere2.isDoesIntersect());
+			System.out.println("Distance: " + plane1IntersectSphere2.getDistance());
+			System.out.println("Plane1 intersect Sphere3: " + plane1IntersectSphere3.isDoesIntersect());
+			System.out.println("Distance: " + plane1IntersectSphere3.getDistance());
+			System.out.println("Plane1 intersect Sphere4: " + plane1IntersectSphere4.isDoesIntersect());
+			System.out.println("Distance: " + plane1IntersectSphere4.getDistance());
+			System.out.println("");
+		}
 	}
 
 	public Vector3f getNormal() {

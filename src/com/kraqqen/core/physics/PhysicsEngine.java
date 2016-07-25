@@ -9,6 +9,7 @@ public class PhysicsEngine {
 	private ArrayList<PhysicsObject> objects;
 
 	public PhysicsEngine() {
+		objects = new ArrayList<PhysicsObject>();
 	}
 
 	public void AddObject(PhysicsObject object) {
@@ -24,16 +25,27 @@ public class PhysicsEngine {
 	public void HandleCollision() {
 		for (int i = 0; i < objects.size(); i++) {
 			for (int j = i + 1; j < objects.size(); j++) {
-				IntersectData intersectData = objects.get(i).getCollider()
-						.Intersect((objects.get(j).getCollider()));
+				IntersectData intersectData = objects.get(i).getCollider().Intersect((objects.get(j).getCollider()));
 
 				if (intersectData.isDoesIntersect()) {
-					
+
+					System.out.println(objects.get(i).getClass().getSimpleName() + " Collided With "
+							+ objects.get(j).getClass().getSimpleName());
+
 					Vector3f direction = intersectData.getDirection().Normalized();
-					Vector3f otherDirection = (Vector3f)(direction.Reflect(objects.get(i).getVelocity().Normalized()));
-					
-					objects.get(i).setVelocity((Vector3f)(objects.get(i).getVelocity().Reflect(otherDirection)));
-					objects.get(j).setVelocity((Vector3f)(objects.get(j).getVelocity().Reflect(direction)));
+					Vector3f otherDirection = (Vector3f) (direction.Reflect(objects.get(i).getVelocity().Normalized()));
+
+					objects.get(i).setVelocity((Vector3f) (objects.get(i).getVelocity().Reflect(otherDirection)));
+					objects.get(j).setVelocity((Vector3f) (objects.get(j).getVelocity().Reflect(direction)));
+
+					System.out.println("Object 'i' new pos: (" + objects.get(i).getPosition().GetX() + ","
+							+ objects.get(i).getPosition().GetY() + "," + objects.get(i).getPosition().GetZ()
+							+ ") vel: (" + objects.get(i).getVelocity().GetX() + ","
+							+ objects.get(i).getVelocity().GetY() + "," + objects.get(i).getVelocity().GetZ() + ")");
+					System.out.println("Object 'j' new pos: (" + objects.get(j).getPosition().GetX() + ","
+							+ objects.get(j).getPosition().GetY() + "," + objects.get(j).getPosition().GetZ()
+							+ ") vel: (" + objects.get(j).getVelocity().GetX() + ","
+							+ objects.get(j).getVelocity().GetY() + "," + objects.get(j).getVelocity().GetZ() + ")");
 				}
 			}
 		}

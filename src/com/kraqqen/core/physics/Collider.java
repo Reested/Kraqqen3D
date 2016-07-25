@@ -22,7 +22,12 @@ public abstract class Collider extends ReferenceCounter {
 	
 	IntersectData Intersect(Collider other){
 		
-		//TODO: add support for Sphere to AABB and AABB to Plane    CHECH THE PLANE COLIDERS
+		/*TODO add support for:
+		 *  AABB to BoundingSphere
+		 *  AABB to Plane
+		 *  BoundingSphere to AABB
+		 *  Plane to AABB
+		 */
 		
 		if(type == ColliderTypes.TYPE_SPHERE.ordinal() && other.getType() == ColliderTypes.TYPE_SPHERE.ordinal()){
 			BoundingSphere self = (BoundingSphere)this;
@@ -34,11 +39,11 @@ public abstract class Collider extends ReferenceCounter {
 			Plane self = (Plane)this;
 			return self.IntersectSphere((BoundingSphere)other);
 		}else if(type == ColliderTypes.TYPE_SPHERE.ordinal() && other.getType() == ColliderTypes.TYPE_PLANE.ordinal()){
-			Plane self = (Plane)this;
-			return self.IntersectSphere((BoundingSphere)other);
+			BoundingSphere self = (BoundingSphere)this;
+			return ((Plane) other).IntersectSphere(self);
 		}else{
 			System.out.println("Error: Collision not implemented between specified " + "colliders.");
-			System.exit(1);
+			//System.exit(1);
 			return new IntersectData(false, new Vector3f(0, 0, 0));
 		}
 	}

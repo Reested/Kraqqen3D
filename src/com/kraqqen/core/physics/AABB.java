@@ -25,11 +25,11 @@ public class AABB extends Collider{
 	
 	@Override
 	void Transform(Vector3f translation) {
-		// TODO Auto-generated method stub
-		
+		minExtents.Add(translation);
+		maxExtents.Add(translation);
 	}
 	
-	public static void test(){
+	public static void test(boolean print){
 		
 		AABB aabb1 = new AABB(new Vector3f(0.0f, 0.0f, 0.0f),  new Vector3f(1.0f, 1.0f, 1.0f));
 		AABB aabb2 = new AABB(new Vector3f(1.0f, 1.0f, 1.0f),  new Vector3f(2.0f, 2.0f, 2.0f));
@@ -59,16 +59,20 @@ public class AABB extends Collider{
 		assert(aabb1Intersectaabb6.isDoesIntersect() == true);
 		assert(aabb1Intersectaabb6.getDistance()     == 0.9110434f);
 		
-//		System.out.println("AABB1 intersect AABB2: " + aabb1Intersectaabb2.isDoesIntersect());
-//		System.out.println("Distance: " + aabb1Intersectaabb2.getDistance());
-//		System.out.println("AABB1 intersect AABB3: " + aabb1Intersectaabb3.isDoesIntersect());
-//		System.out.println("Distance: " + aabb1Intersectaabb3.getDistance());
-//		System.out.println("AABB1 intersect AABB4: " + aabb1Intersectaabb4.isDoesIntersect());
-//		System.out.println("Distance: " + aabb1Intersectaabb4.getDistance());
-//		System.out.println("AABB1 intersect AABB5: " + aabb1Intersectaabb5.isDoesIntersect());
-//		System.out.println("Distance: " + aabb1Intersectaabb5.getDistance());
-//		System.out.println("AABB1 intersect AABB6: " + aabb1Intersectaabb6.isDoesIntersect());
-//		System.out.println("Distance: " + aabb1Intersectaabb6.getDistance());
+		if(print){
+			System.out.println("");
+			System.out.println("AABB1 intersect AABB2: " + aabb1Intersectaabb2.isDoesIntersect());
+			System.out.println("Distance: " + aabb1Intersectaabb2.getDistance());
+			System.out.println("AABB1 intersect AABB3: " + aabb1Intersectaabb3.isDoesIntersect());
+			System.out.println("Distance: " + aabb1Intersectaabb3.getDistance());
+			System.out.println("AABB1 intersect AABB4: " + aabb1Intersectaabb4.isDoesIntersect());
+			System.out.println("Distance: " + aabb1Intersectaabb4.getDistance());
+			System.out.println("AABB1 intersect AABB5: " + aabb1Intersectaabb5.isDoesIntersect());
+			System.out.println("Distance: " + aabb1Intersectaabb5.getDistance());
+			System.out.println("AABB1 intersect AABB6: " + aabb1Intersectaabb6.isDoesIntersect());
+			System.out.println("Distance: " + aabb1Intersectaabb6.getDistance());
+			System.out.println("");
+		}
 	}
 
 	public Vector3f getMinExtents() {
@@ -81,8 +85,7 @@ public class AABB extends Collider{
 
 	@Override
 	Vector3f getCenter() {
-		// TODO Auto-generated method stub
-		return null;
+		return (minExtents.Add(maxExtents)).Div(2);
 	}
 
 }

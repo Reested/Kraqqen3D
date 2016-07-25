@@ -32,7 +32,7 @@ public class BoundingSphere extends Collider{
 		
 	}
 	
-	public static void test(){
+	public static void test(boolean print){
 		
 		BoundingSphere sphere1 = new BoundingSphere(new Vector3f(0.0f, 0.0f, 0.0f), 1.0f);
 		BoundingSphere sphere2 = new BoundingSphere(new Vector3f(0.0f, 3.0f, 0.0f), 1.0f);
@@ -52,12 +52,16 @@ public class BoundingSphere extends Collider{
 		assert(sphere1IntersectSphere4.isDoesIntersect() == true);
 		assert(sphere1IntersectSphere4.getDistance()     == 1.0f);
 		
-//		System.out.println("Sphere1 intersect Sphere2: " + sphere1IntersectSphere2.isDoesIntersect());
-//		System.out.println("Distance: " + sphere1IntersectSphere2.getDistance());
-//		System.out.println("Sphere1 intersect Sphere3: " + sphere1IntersectSphere3.isDoesIntersect());
-//		System.out.println("Distance: " + sphere1IntersectSphere3.getDistance());
-//		System.out.println("Sphere1 intersect Sphere4: " + sphere1IntersectSphere4.isDoesIntersect());
-//		System.out.println("Distance: " + sphere1IntersectSphere4.getDistance());
+		if(print){
+			System.out.println("");
+			System.out.println("Sphere1 intersect Sphere2: " + sphere1IntersectSphere2.isDoesIntersect());
+			System.out.println("Distance: " + sphere1IntersectSphere2.getDistance());
+			System.out.println("Sphere1 intersect Sphere3: " + sphere1IntersectSphere3.isDoesIntersect());
+			System.out.println("Distance: " + sphere1IntersectSphere3.getDistance());
+			System.out.println("Sphere1 intersect Sphere4: " + sphere1IntersectSphere4.isDoesIntersect());
+			System.out.println("Distance: " + sphere1IntersectSphere4.getDistance());
+			System.out.println("");
+		}
 	}
 	
 	@Override
