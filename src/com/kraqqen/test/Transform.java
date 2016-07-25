@@ -27,6 +27,11 @@ public class Transform
 	{
 		return new Transform(pos, m_rot, m_scale);
 	}
+	
+	public Transform SetScale(Vector4f scl)
+	{
+		return new Transform(m_pos, m_rot, scl);
+	}
 
 	public Transform Rotate(Quaternion rotation)
 	{

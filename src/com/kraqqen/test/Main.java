@@ -31,6 +31,9 @@ package com.kraqqen.test;
 
 import java.io.IOException;
 
+import com.kraqqen.engine.gui.GUIButton;
+import com.kraqqen.util.math.Rect;
+
 /**
  * The sole purpose of this class is to hold the main method.
  *
@@ -40,6 +43,9 @@ public class Main
 {
 	// Lazy exception handling here. You can do something more interesting 
 	// depending on what you're doing
+	
+	public static Matrix4f Ortho;
+	
 	public static void main(String[] args) throws IOException
 	{
 		Display display = new Display(800, 600, "Software Rendering");
@@ -53,8 +59,12 @@ public class Main
 		Mesh terrainMesh = new Mesh("./res/terrain2.obj");
 		Transform terrainTransform = new Transform(new Vector4f(0,-1.0f,0.0f));
 
+		Ortho = new Matrix4f().InitOrthographic(0, display.getWidth(), display.getHeight(), 0, -0.01f, 1000f);
+		
 		Camera camera = new Camera(new Matrix4f().InitPerspective((float)Math.toRadians(70.0f),
 					   	(float)target.GetWidth()/(float)target.GetHeight(), 0.1f, 1000.0f));
+		
+		GUIButton button = new GUIButton(new Rect(0, 0, 100, 100));
 		
 		@SuppressWarnings("unused")
 		float rotCounter = 0.0f;
@@ -74,6 +84,8 @@ public class Main
 			target.ClearDepthBuffer();
 			monkeyMesh.Draw(target, vp, monkeyTransform.GetTransformation(), texture2);
 			terrainMesh.Draw(target, vp, terrainTransform.GetTransformation(), texture);
+			
+			button.Draw(target);
 
 			display.SwapBuffers();
 			
