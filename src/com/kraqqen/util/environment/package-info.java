@@ -5,4 +5,4 @@
  * @author E
  *
  */
-package com.kraqqen.util.envr;
+package com.kraqqen.util.environment;

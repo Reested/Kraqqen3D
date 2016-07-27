@@ -1,4 +1,4 @@
-package com.kraqqen.util.unit_tst;
+package com.kraqqen.util.unit_test;
 
 public class TestSuite /*extends EditorTestSuite extends ScriptEditorTestSuite*/ {
 	

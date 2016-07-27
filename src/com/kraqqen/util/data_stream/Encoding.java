@@ -1,4 +1,4 @@
-package com.kraqqen.util.dat_str;
+package com.kraqqen.util.data_stream;
 
 public class Encoding {
 	

@@ -1,4 +1,4 @@
-package com.kraqqen.util.sys_info;
+package com.kraqqen.util.system_info;
 
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.CompilationMXBean;

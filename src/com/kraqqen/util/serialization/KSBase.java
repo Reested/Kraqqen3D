@@ -1,4 +1,4 @@
-package com.kraqqen.util.sern;
+package com.kraqqen.util.serialization;
 
 public abstract class KSBase {
 

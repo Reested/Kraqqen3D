@@ -1,4 +1,4 @@
-package com.kraqqen.util.crh_hndl;
+package com.kraqqen.util.crash_handling;
 
 /*
  * An exception thrown by a Kraqqen object

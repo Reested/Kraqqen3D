@@ -1,6 +1,6 @@
 package com.kraqqen.engine.application;
 
-import com.kraqqen.util.crh_hndl.KraqqenException;
+import com.kraqqen.util.crash_handling.KraqqenException;
 
 public class Application {
 	

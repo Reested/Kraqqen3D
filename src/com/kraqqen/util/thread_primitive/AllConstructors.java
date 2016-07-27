@@ -1,4 +1,4 @@
-package com.kraqqen.util.thrd_prm;
+package com.kraqqen.util.thread_primitive;
 
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.CompilationMXBean;

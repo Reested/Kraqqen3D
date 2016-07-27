@@ -9,7 +9,7 @@ import com.kraqqen.core.physics.PhysicsEngine;
 import com.kraqqen.core.physics.PhysicsObject;
 import com.kraqqen.core.physics.Plane;
 import com.kraqqen.editor.MainTestLoop;
-import com.kraqqen.util.envr.EnvironmentSettings;
+import com.kraqqen.util.environment.EnvironmentSettings;
 import com.kraqqen.util.logging.Log;
 import com.kraqqen.util.math.Vector3f;
 import com.kraqqen.util.timing.Timer;

@@ -5,4 +5,4 @@
  * @author E
  *
  */
-package com.kraqqen.util.sys_info;
+package com.kraqqen.util.system_info;

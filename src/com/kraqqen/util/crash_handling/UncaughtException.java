@@ -1,4 +1,4 @@
-package com.kraqqen.util.crh_hndl;
+package com.kraqqen.util.crash_handling;
 
 import com.kraqqen.util.logging.Log;
 

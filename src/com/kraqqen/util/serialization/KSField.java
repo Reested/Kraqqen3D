@@ -1,6 +1,6 @@
-package com.kraqqen.util.sern;
+package com.kraqqen.util.serialization;
 
-import static com.kraqqen.util.sern.SerializationUtils.*;
+import static com.kraqqen.util.serialization.SerializationUtils.*;
 
 public class KSField extends KSBase {
 

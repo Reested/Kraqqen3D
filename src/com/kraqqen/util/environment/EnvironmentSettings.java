@@ -1,4 +1,4 @@
-package com.kraqqen.util.envr;
+package com.kraqqen.util.environment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.kraqqen.util.sys_info.SystemSettings;
+import com.kraqqen.util.system_info.SystemSettings;
 
 public class EnvironmentSettings {
 	

@@ -4,7 +4,7 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
-import com.kraqqen.util.sys_info.SystemInfo;
+import com.kraqqen.util.system_info.SystemInfo;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;

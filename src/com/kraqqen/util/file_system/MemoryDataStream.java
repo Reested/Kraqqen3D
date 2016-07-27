@@ -1,4 +1,4 @@
-package com.kraqqen.util.fl_sys;
+package com.kraqqen.util.file_system;
 
 public class MemoryDataStream {
 
