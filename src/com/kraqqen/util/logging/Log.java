@@ -40,4 +40,8 @@ public class Log {
 		LOGGER.finest("Really not important4");
 
 	}
+	
+	public static Logger getLogger(String name){
+		return Logger.getLogger(name);
+	}
 }

@@ -21,7 +21,7 @@ public class KraqqenCore {
 	static Timer saveTimer = new Timer();
 	static Timer loadTimer = new Timer();
 	static Timer runTimer = new Timer();
-	static File file = new File("scripts/matrix.bat");
+	//static File file = new File("scripts/jvm_args.bat");
 	
 
 	public static void main(String[] args) {
