@@ -26,6 +26,13 @@ public class BoundingSphere extends Collider{
 		return new IntersectData(centerDistance < radiusDistance, direction.Mul(distance));
 	}
 	
+	public IntersectData IntersectAABB(AABB other){
+		
+		
+		
+		return new IntersectData(false, new Vector3f(0, 0, 0));
+	}
+	
 	@Override
 	void Transform(Vector3f translation) {
 		center = center.Add(translation);

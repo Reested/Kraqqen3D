@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.management.ObjectName;
 
+import org.lwjgl.Version;
+
 public class SystemInfo {
 
 	private static final int DISPLAYED_MESSAGE_LENGTH = 50;
@@ -56,6 +58,8 @@ public class SystemInfo {
 
 	public void printInfo() {
 
+		pl("","");
+		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 		pl("","");
 		
 		

@@ -23,6 +23,38 @@ public class AABB extends Collider{
 		return new IntersectData(maxDistance < 0,distances);
 	}
 	
+	public IntersectData IntersectBoundingSphere(BoundingSphere other){
+		
+		float dmin;
+		Vector3f center, bmin, bmax;
+		
+		dmin = 0.0f;
+		
+	    center = other.getCenter();
+	    bmin = this.getMinExtents();
+	    bmax = this.getMaxExtents();
+
+	    if (center.GetX() < bmin.GetX()) {
+	        dmin += Math.pow(center.GetX() - bmin.GetX(), 2);
+	    } else if (center.GetX() > bmax.GetX()) {
+	        dmin += Math.pow(center.GetX() - bmax.GetX(), 2);
+	    }
+
+	    if (center.GetY() < bmin.GetY()) {
+	        dmin += Math.pow(center.GetY() - bmin.GetY(), 2);
+	    } else if (center.GetY() > bmax.GetY()) {
+	        dmin += Math.pow(center.GetY() - bmax.GetY(), 2);
+	    }
+
+	    if (center.GetZ() < bmin.GetZ()) {
+	        dmin += Math.pow(center.GetZ() - bmin.GetZ(), 2);
+	    } else if (center.GetZ() > bmax.GetZ()) {
+	        dmin += Math.pow(center.GetZ() - bmax.GetZ(), 2);
+	    }
+
+	    return new IntersectData(dmin <= Math.pow(other.getRadius(), 2), new Vector3f(0, 1, 0)); 
+	}
+	
 	@Override
 	void Transform(Vector3f translation) {
 		minExtents.Add(translation);
