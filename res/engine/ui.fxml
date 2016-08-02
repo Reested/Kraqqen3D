@@ -1,12 +1,29 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.kraqqen.editor.*?>
 
 <BorderPane>
     <top>
-        <Label text="Page Title"/>
     </top>
+    <right>
+    	<TabPane prefWidth="200">
+    		<KraqqenTab text="Inspector"></KraqqenTab>
+    	</TabPane>
+    </right>
     <center>
-        <Label text="Some data here"/>
+    	<TabPane>
+    		<KraqqenTab text="Scene Editor"></KraqqenTab>
+    	</TabPane>
     </center>
+    <left>
+	    <GridPane>
+	    	<TabPane prefHeight="300" prefWidth="200" GridPane.columnIndex="0" GridPane.rowIndex="0">
+	    		<KraqqenTab text="Project Explorer"></KraqqenTab>
+	    	</TabPane>
+	    	<TabPane prefHeight="300" GridPane.columnIndex="0" GridPane.rowIndex="1">
+	    		<KraqqenTab text="Assets"></KraqqenTab>
+	    	</TabPane>
+    	</GridPane>
+    </left>
 </BorderPane>

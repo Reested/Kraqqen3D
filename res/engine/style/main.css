@@ -1,9 +1,148 @@
-.button {
-	-fx-border-color: black;
-	-fx-border-width: 1px;
-	-fx-background-color: #FFFFFF;
+.root {
+	-fx-background-color: #333333;
+    -fx-text-fill: #FFFFFF;
 }
 
 .label {
-    -fx-font-size: 16px;
+    -fx-text-fill: #FFFFFF;
+	-fx-font: 13px "Arial"
+}
+
+.pane {
+    -fx-text-fill: #FFFFFF;
+}
+
+.text {
+    -fx-text-fill: #FFFFFF;
+	-fx-font: 13px "Arial"
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    /* -fx-opacity: 0; */
+    -fx-background-color: #4d4d4d;
+}
+
+.tab-pane .tab:selected {
+	
+}
+
+.tab {
+    -fx-background-insets: 0, 0 0 1 0;
+	-fx-border-width: 1 1 0 1;
+	-fx-border-radius: 0px;
+	-fx-border-color: black;
+	-fx-background-color: #333333;
+}
+
+.tab-content-area {
+	-fx-border-width: 0 0 1 1;
+	-fx-border-radius: 0px;
+	-fx-border-color: black;
+}
+
+.pane {
+    -fx-background-color: #333333;
+}
+
+.tab-label {
+    -fx-text-fill: #FFFFFF;
+	-fx-font: 13px "Arial"
+}
+
+.menu-bar {
+	-fx-background-color: #333333;
+}
+
+.menu {
+	-fx-background-color: #333333;
+}
+
+.context-menu {
+	-fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+	-fx-background-color: #333333;
+}
+
+.titled-pane {
+	-fx-text-fill: #FFFFFF;
+}
+
+.titled-pane > .title {
+	-fx-font: 16px "Sans Serif";
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 0;
+    -fx-border-color: #4d4d4d;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0;
+}
+
+.titled-pane > *.content {
+	-fx-border-style: solid;
+	-fx-border-width: 1px;
+    -fx-border-color: #4d4d4d;
+}
+
+.popup {
+    -fx-background-color: cornsilk;
+    -fx-padding: 10;
+    -fx-border-color: black; 
+    -fx-border-width: 5;
+    -fx-font-size: 16;
+}
+
+.tree-view, .tree-cell {
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #FFFFFF;
+}
+
+.tree-cell:expanded, .tree-cell:sub-tree-item {
+	
+}
+
+.tree-cell:selected {
+	-fx-background-color: #333333;
+}
+
+.tree-cell {
+    -fx-indent: 15px;
+}
+
+.tree-cell:sub-tree-item {
+	
+}
+
+.dialog-pane {
+	-fx-background-color: black;
+	-fx-text-fill: white;
+}
+
+.button {
+    -fx-font: 16px "Sans Serif";
+    -fx-padding: 10px;
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 0;
+    -fx-border-color: #4d4d4d;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0;
+}
+
+.text-field {
+	-fx-background-color: black;
+	-fx-text-fill: white;
+    -fx-border-color: #4d4d4d;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0;
+}
+
+.button:hover {
+	-fx-background-color: #333333;
+}
+
+.button:pressed {
+	-fx-background-color: #595959;
+}
+
+.scroll-bar {
+	-fx-background-color:derive(black,90%);
 }
