@@ -1,6 +1,7 @@
 package com.kraqqen.core.renderer;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.util.logging.Logger;
@@ -27,6 +28,10 @@ public class Window {
 		
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	}
 	
 	private long glfwID;
@@ -39,7 +44,7 @@ public class Window {
 	
 	public Window()
 	{
-		vals("Kraqqen3D Game", 800, 600);
+		vals("Game", 800, 600);
 		createWindow();
 	}
 	
@@ -57,7 +62,7 @@ public class Window {
 	
 	public Window(int width, int height)
 	{
-		vals("Kraqqen3D Game", width, height);
+		vals("Game", width, height);
 		createWindow();
 	}
 	
@@ -96,6 +101,7 @@ public class Window {
 		if(!destroyed)
 		{
 			glfwShowWindow(glfwID);
+			Active();
 		} else
 		{
 			createWindow();
@@ -173,6 +179,11 @@ public class Window {
 
 	public long getGlfwID() {
 		return glfwID;
+	}
+	
+	public float getAspectRatio()
+	{
+		return (float) width / (float) height;
 	}
 
 }
