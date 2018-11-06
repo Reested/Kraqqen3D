@@ -1,46 +1,162 @@
 package com.tcc.net;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
-public class BinaryWriter {
+import com.tcc.util.serialization.TCSArray;
+import com.tcc.util.serialization.TCSDatabase;
+
+public class Client {
 	
-	private List<Byte> buffer;
+	private final static byte[] CONNECTION_PACKET_HEADER = new byte[] { 0x40 , 0x40 };
+	private final static byte PACKET_TYPE_CONNECT = 0x01;
+	private final static byte PACKET_TYPE_GET_CONNECTED_USERS_LIST = 0x02;
+	private final static byte PACKET_TYPE_DISCONNECT = 0x7F;
 	
-	public BinaryWriter(){
-		buffer = new ArrayList<Byte>();
+	private final static byte[] LOGIN_REQUEST_PACKET_HEADER = new byte[] { 0x69 , 0x69 };
+	private final static byte PACKET_TYPE_LOGIN_REQUEST = 0x01;
+	
+	public enum Error{
+		NONE, INVALID_HOST, SOCKET_EXCEPTION, BAD_LOGIN
 	}
 	
-	public BinaryWriter(int size){
-		buffer = new ArrayList<Byte>(size);
-	}
+	private String ipAddress;
+	//server port
+	private int port;
+	private Error errorCode = Error.NONE;
 	
-	public void write(byte[] data){
-		for(int i=0; i<data.length; i++){
-			buffer.add(data[i]);
+	private InetAddress serverAddress;
+	
+	private DatagramSocket socket;
+	
+	/*host:
+	 * Format 192.168.1.1:5000
+	 */
+	public Client(String host){
+		String[] parts = host.split(":");
+		if(parts.length != 2){
+			errorCode = Error.INVALID_HOST;
+			return;
+		}
+		ipAddress = parts[0];
+		try{
+			port = Integer.parseInt(parts[1]);
+		}catch (NumberFormatException e) {
+			errorCode = Error.INVALID_HOST;
+			return;
 		}
 	}
 	
-	public void write(int data){
-//		byte[] b = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(data).array();
-//		System.out.println(b[0] + " " + b[1] + " " + b[2] + " " + b[3]);
-		byte[] a = new byte[]{(byte) data};
-		write(a);
+	/*host:
+	 * Format 192.168.1.1
+	 * 
+	 *port:
+	 * Format 5000
+	 */
+	public Client(String host, int port){
+		this.ipAddress = host;
+		this.port = port;
 	}
 	
-	public byte[] getBuffer(){
-		Byte[] array = new Byte[buffer.size()];
-		buffer.toArray(array);
-		byte[] result = new byte[buffer.size()];
-		for(int i=0; i<result.length; i++)
-			result[i] = array[i];
-		return result;
+	public boolean connect(){
+		
+		try {
+			serverAddress = InetAddress.getByName(ipAddress);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			errorCode = Error.INVALID_HOST;
+			return false;
+		}
+		
+		try {
+			socket = new DatagramSocket();
+		} catch (SocketException e) {
+			e.printStackTrace();
+			errorCode = Error.SOCKET_EXCEPTION;
+			return false;
+		}
+		
+		sendConnectionPacket();
+		return true;
+		
 	}
 	
-	public void print(){
-		for(int i=0; i<buffer.size(); i++){
-			System.out.println(buffer.get(i).toString());
+	public boolean disconnect(){
+		sendDisconnectionPacket();
+		return true;
+	}
+	
+	private void sendConnectionPacket(){
+		BinaryWriter writer = new BinaryWriter();
+		writer.write(CONNECTION_PACKET_HEADER);
+		writer.write(PACKET_TYPE_CONNECT);
+		writer.print();
+		send(writer.getBuffer());
+	}
+	
+	private void sendDisconnectionPacket(){
+		BinaryWriter writer = new BinaryWriter();
+		writer.write(CONNECTION_PACKET_HEADER);
+		writer.write(PACKET_TYPE_DISCONNECT);
+		writer.print();
+		send(writer.getBuffer());
+	}
+	
+	/*
+	 * [header 		= 	69 		69		]
+	 * [type   		= 	   		01		]
+	 * [sizeOfU&P 	= 	XX(u) 	XX(p)	]
+	 * [UserName	= 	XX 		..		]
+	 * [PassWord	=	XX		..		]
+	 */
+	public void sendLoginPacket(String username, String password){
+		BinaryWriter writer = new BinaryWriter();
+		writer.write(LOGIN_REQUEST_PACKET_HEADER);
+		writer.write(PACKET_TYPE_LOGIN_REQUEST);
+		writer.write(username.getBytes().length);
+		writer.write(password.getBytes().length);
+		writer.write(username.getBytes());
+		writer.write(password.getBytes());
+		writer.print();
+		send(writer.getBuffer());
+	}
+	
+	public void send(byte[] data){
+		assert(socket.isConnected());
+		DatagramPacket packet = null;
+		try {
+			packet = new DatagramPacket(data, data.length, serverAddress, port);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
+	
+	public void send(TCSDatabase database){
+		byte[] data = new byte[database.getSize()];
+		database.getBytes(data, 0);
+		send(data);
+	}
+	
+	public Error getErrorCode(){
+		return errorCode;
+	}
 
+	public void sendClientsRequest() {
+		BinaryWriter writer = new BinaryWriter();
+		writer.write(CONNECTION_PACKET_HEADER);
+		writer.write(PACKET_TYPE_GET_CONNECTED_USERS_LIST);
+		writer.print();
+		send(writer.getBuffer());
+	}
+	
 }
