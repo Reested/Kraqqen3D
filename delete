@@ -1,162 +1,94 @@
-package com.tcc.net;
+package com.tcc;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.util.Scanner;
 
-import com.tcc.util.serialization.TCSArray;
+import com.tcc.net.Client;
 import com.tcc.util.serialization.TCSDatabase;
+import com.tcc.util.serialization.TCSField;
+import com.tcc.util.serialization.TCSObject;
 
-public class Client {
+/*
+ * 1) Create Window To Login
+ * 2) Check Login info on server
+ * 3) Retrieve Employee type
+ * 4) Open session based on Employee type
+ * 5) Run
+ * 6) Close
+ */
+
+public class main {
+
+	private static boolean running = true;
 	
-	private final static byte[] CONNECTION_PACKET_HEADER = new byte[] { 0x40 , 0x40 };
-	private final static byte PACKET_TYPE_CONNECT = 0x01;
-	private final static byte PACKET_TYPE_GET_CONNECTED_USERS_LIST = 0x02;
-	private final static byte PACKET_TYPE_DISCONNECT = 0x7F;
-	
-	private final static byte[] LOGIN_REQUEST_PACKET_HEADER = new byte[] { 0x69 , 0x69 };
-	private final static byte PACKET_TYPE_LOGIN_REQUEST = 0x01;
-	
-	public enum Error{
-		NONE, INVALID_HOST, SOCKET_EXCEPTION, BAD_LOGIN
-	}
-	
-	private String ipAddress;
-	//server port
-	private int port;
-	private Error errorCode = Error.NONE;
-	
-	private InetAddress serverAddress;
-	
-	private DatagramSocket socket;
-	
-	/*host:
-	 * Format 192.168.1.1:5000
-	 */
-	public Client(String host){
-		String[] parts = host.split(":");
-		if(parts.length != 2){
-			errorCode = Error.INVALID_HOST;
-			return;
-		}
-		ipAddress = parts[0];
-		try{
-			port = Integer.parseInt(parts[1]);
-		}catch (NumberFormatException e) {
-			errorCode = Error.INVALID_HOST;
-			return;
-		}
-	}
-	
-	/*host:
-	 * Format 192.168.1.1
-	 * 
-	 *port:
-	 * Format 5000
-	 */
-	public Client(String host, int port){
-		this.ipAddress = host;
-		this.port = port;
-	}
-	
-	public boolean connect(){
+	public static void main(String[] args) {
 		
-		try {
-			serverAddress = InetAddress.getByName(ipAddress);
+		Scanner scanner = new Scanner(System.in);
+		
+		//1
+		Client client = new Client("localhost", 8192);
+		if(!client.connect()){
+			p("Error 1000: Could not connect to host.");
+		}
+		
+		client.sendClientsRequest();
+		/*
+		p("Enter Username:");
+		String username = scanner.nextLine();
+		p("");
+		p("Enter Password:");
+		String password = scanner.nextLine();
+		client.sendLoginPacket(username, password);
+		TCSDatabase database = TCSDatabase.DeserializeFromFile("src/com/tcc/test.bin");
+		client.send(database);
+		System.err.println("database 1 sent");
+		
+		//2
+		//3
+		//4
+		//5
+		while(running){
+			running = false;
+		}
+		*/
+		//6
+		close(client);
+		
+		/*
+		Client client = new Client("localhost", 8192);
+		if(!client.connect()){
 			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			errorCode = Error.INVALID_HOST;
-			return false;
 		}
+		*/
+		save();
 		
-		try {
-			socket = new DatagramSocket();
-		} catch (SocketException e) {
-			e.printStackTrace();
-			errorCode = Error.SOCKET_EXCEPTION;
-			return false;
-		}
 		
-		sendConnectionPacket();
-		return true;
 		
 	}
 	
-	public boolean disconnect(){
-		sendDisconnectionPacket();
-		return true;
+	public static void close(Client client){
+		client.disconnect();
 	}
 	
-	private void sendConnectionPacket(){
-		BinaryWriter writer = new BinaryWriter();
-		writer.write(CONNECTION_PACKET_HEADER);
-		writer.write(PACKET_TYPE_CONNECT);
-		writer.print();
-		send(writer.getBuffer());
+	public static void p(String string){
+		System.out.println(string);
 	}
 	
-	private void sendDisconnectionPacket(){
-		BinaryWriter writer = new BinaryWriter();
-		writer.write(CONNECTION_PACKET_HEADER);
-		writer.write(PACKET_TYPE_DISCONNECT);
-		writer.print();
-		send(writer.getBuffer());
-	}
-	
-	/*
-	 * [header 		= 	69 		69		]
-	 * [type   		= 	   		01		]
-	 * [sizeOfU&P 	= 	XX(u) 	XX(p)	]
-	 * [UserName	= 	XX 		..		]
-	 * [PassWord	=	XX		..		]
-	 */
-	public void sendLoginPacket(String username, String password){
-		BinaryWriter writer = new BinaryWriter();
-		writer.write(LOGIN_REQUEST_PACKET_HEADER);
-		writer.write(PACKET_TYPE_LOGIN_REQUEST);
-		writer.write(username.getBytes().length);
-		writer.write(password.getBytes().length);
-		writer.write(username.getBytes());
-		writer.write(password.getBytes());
-		writer.print();
-		send(writer.getBuffer());
-	}
-	
-	public void send(byte[] data){
-		assert(socket.isConnected());
-		DatagramPacket packet = null;
-		try {
-			packet = new DatagramPacket(data, data.length, serverAddress, port);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		try {
-			socket.send(packet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void send(TCSDatabase database){
-		byte[] data = new byte[database.getSize()];
-		database.getBytes(data, 0);
-		send(data);
-	}
-	
-	public Error getErrorCode(){
-		return errorCode;
+	public static void save(){
+		TCSDatabase db = new TCSDatabase("Screen");
+		
+		TCSObject res = new TCSObject("Resolution");
+		res.addField(TCSField.Integer("width", 720));
+		res.addField(TCSField.Integer("height", 1260));
+		res.addField(TCSField.Integer("scale", 4));
+		db.addObject(res);
+		
+		TCSObject player = new TCSObject("Player");
+		player.addField(TCSField.Integer("location", 123234123));
+		player.addField(TCSField.Integer("health", 45));
+		player.addField(TCSField.Integer("points", 4));
+		db.addObject(player);
+		
+		db.serializeToFile("src/com/tcc/test.bin");
 	}
 
-	public void sendClientsRequest() {
-		BinaryWriter writer = new BinaryWriter();
-		writer.write(CONNECTION_PACKET_HEADER);
-		writer.write(PACKET_TYPE_GET_CONNECTED_USERS_LIST);
-		writer.print();
-		send(writer.getBuffer());
-	}
-	
 }
