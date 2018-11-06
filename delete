@@ -1,179 +1,46 @@
-private void process(DatagramPacket packet){
-		// If TC/RCDB (database)
-		byte[] data = packet.getData();
-		
-		InetAddress address = packet.getAddress();
-		int port = packet.getPort();
-		
-		dump(packet);
-		
-		if(new String(data, 0 ,4).equals("RCDB")){
-			TCSDatabase database = TCSDatabase.Deserialize(data);
-			process(database);
-		}else if (data[0] == 0x40 && data[1] == 0x40){
-			switch (data[2]) {
-			case 1:
-				clients.add(new ServerConnection(packet.getAddress(), packet.getPort()));
-				System.out.println("THIS IS A CONNECTION PACKET!");
-				break;
-				
-			case 2:
-				ServerConnection[] cli = new ServerConnection[clients.size()];
-				clients.toArray(cli);
-				for(int i=0; i<clients.size(); i++){
-					System.out.println("IP: " + cli[i].address + ":" + cli[i].port + " " + cli[i].status);
-				}
-				break;
-				
-			case 3:
-				//Login Attempt Packet
-				break;
-				
-			case 0x7F:
-				//for(int i=0; i<clients.size(); i++){
-				//	if (clients.getAddress() == packet.getAddress()){
-						
-				//	}
-				//}
-				//clients.remove(packet);
-				System.out.println("I Want To Disconnect.");
-				break;
+package com.tcc.net;
 
-			default:
-				break;
-			}
-		}else if (data[0] == 0x69 && data[1] == 0x69){
-			switch (data[2]) {
-			//login
-			case 1:
-				processLogin(data);
-				break;
+import java.util.ArrayList;
+import java.util.List;
 
-			default:
-				break;
-			}
+public class BinaryWriter {
+	
+	private List<Byte> buffer;
+	
+	public BinaryWriter(){
+		buffer = new ArrayList<Byte>();
+	}
+	
+	public BinaryWriter(int size){
+		buffer = new ArrayList<Byte>(size);
+	}
+	
+	public void write(byte[] data){
+		for(int i=0; i<data.length; i++){
+			buffer.add(data[i]);
 		}
 	}
 	
-	private void process(TCSDatabase database){
-		System.out.println("Recieved Database");
-		dump(database);
+	public void write(int data){
+//		byte[] b = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(data).array();
+//		System.out.println(b[0] + " " + b[1] + " " + b[2] + " " + b[3]);
+		byte[] a = new byte[]{(byte) data};
+		write(a);
 	}
 	
-	private void dump(DatagramPacket packet){
-		byte[] data  = packet.getData();
-		InetAddress address = packet.getAddress();
-		int port = packet.getPort();
-		
-		System.out.println("==========================================");
-		System.out.println("PACKET: ");
-		System.out.println("\t" + address.getHostAddress() + ":" + port);
-		System.out.println("");
-		System.out.println("\tContents:");
-		System.out.print("\n\t\t");
-		for(int i=0; i<packet.getLength(); i++){
-			System.out.printf("%02x ", data[i]);
-			if((i+1)%16==0){
-				System.out.print("\n\t\t");
-			}
-		}
-		System.out.println();
-		System.out.println("==========================================");
-		System.out.println();
+	public byte[] getBuffer(){
+		Byte[] array = new Byte[buffer.size()];
+		buffer.toArray(array);
+		byte[] result = new byte[buffer.size()];
+		for(int i=0; i<result.length; i++)
+			result[i] = array[i];
+		return result;
 	}
 	
-	private void dump(TCSDatabase database){
-		
-		byte[] arrayData = null;
-		
-		System.out.println("=========================================");
-		System.out.println("\t\tKSDatabase");
-		System.out.println("-----------------------------------------");
-		System.out.println("Name: " + database.getName());
-		System.out.println("Size: " + database.getSize());
-		System.out.println("Object Count: " +  database.objects.size());
-		System.out.println("");
-		for(TCSObject object : database.objects){
-			System.out.println("\tObject: ");
-			System.out.println("\tName: " + object.getName());
-			System.out.println("\tSize: " + object.getSize());
-			System.out.println("");
-			System.out.println("\tField Count: " +  object.fields.size());
-			System.out.println("");
-			for(TCSField field : object.fields){
-				System.out.println("\t\tField: ");
-				System.out.println("\t\tName: " + field.getName());
-				System.out.println("\t\tSize: " + field.getSize());
-				String data = "";
-				switch(field.type){
-				case Type.BYTE:
-					data += field.getByte();
-					break;
-				case Type.SHORT:
-					data += field.getShort();
-					break;
-				case Type.CHAR:
-					data += field.getChar();
-					break;
-				case Type.INTEGER:
-					data += field.getInt();
-					break;
-				case Type.LONG:
-					data += field.getLong();
-					break;
-				case Type.FLOAT:
-					data += field.getFloat();
-					break;
-				case Type.DOUBLE:
-					data += field.getDouble();
-					break;
-				case Type.BOOLEAN:
-					data += field.getBoolean();
-					break;
-				}
-				System.out.println("\t\tData: " + data);
-				System.out.println("");
-			}
-			for(TCSArray array : object.arrays){
-				//arrayData = KSArray.Deserialize(array.data, 0);
-				System.out.println("\t\tArray:");
-				System.out.println("\t\tName: " + array.getName());
-				System.out.println("\t\tSize: " + array.getSize());
-				//System.out.println("\t\tData: " + arrayData.toString());
-//				System.out.println(array.);
-				System.out.println("");
-			}
-			System.out.println("");
+	public void print(){
+		for(int i=0; i<buffer.size(); i++){
+			System.out.println(buffer.get(i).toString());
 		}
-		System.out.println("=========================================");
-		System.out.println("");
 	}
-	
-	private void processLogin(byte[] data){
-		System.out.println("-----START OF LOGIN INFO-----");
-		
-		int userLength = data[3];
-		int passLength = data[4];
-		
-		byte[] userName = new byte[userLength];
-		byte[] passWord = new byte[passLength];
-		
-		
-		for(int i=0; i<userLength; i++){
-			//3 for the header data
-			userName[i] = data[i+3];
-		}
-		
-		for(int i=0; i<passLength; i++){
-			//3 for the header data
-			passWord[i] = data[i+3+userLength];
-		}
-		
-		
-		System.out.println(userLength);
-		System.out.println(passLength);
-		System.out.println(passWord[0]);
-		System.out.println(userName[0]);
-		
-		System.out.println("------END OF LOGIN INFO------");
-	}
+
+}
